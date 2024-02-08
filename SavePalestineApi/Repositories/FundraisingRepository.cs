@@ -49,9 +49,9 @@ namespace SavePalestineApi.Repositories
             if (newImageFile != null && fundraising.ImageUrl != null)
             {
                 var existingImagePath = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", Path.GetFileName(fundraising.ImageUrl));
-                if (System.IO.File.Exists(existingImagePath))
+                if (File.Exists(existingImagePath))
                 {
-                    System.IO.File.Delete(existingImagePath);
+                    File.Delete(existingImagePath);
                 }
             }
 
@@ -79,9 +79,9 @@ namespace SavePalestineApi.Repositories
             if (fundraising.ImageUrl != null)
             {
                 var imagePath = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", Path.GetFileName(fundraising.ImageUrl));
-                if (System.IO.File.Exists(imagePath))
+                if (File.Exists(imagePath))
                 {
-                    System.IO.File.Delete(imagePath);
+                    File.Delete(imagePath);
                 }
             }
 
