@@ -48,14 +48,14 @@ namespace SavePalestineApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult UpdateProduct(int id, Product product)
+        public ActionResult UpdateProduct(int id, [FromForm] Product product, IFormFile formFile)
         {
             if (id != product.Id)
             {
                 return BadRequest();
             }
 
-            _productRepository.UpdateProduct(product);
+            _productRepository.UpdateProduct(product, formFile);
             return Ok(product);
         }
 

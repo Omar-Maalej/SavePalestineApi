@@ -45,8 +45,29 @@ namespace SavePalestineApi.Repositories
             _context.SaveChanges();
             return product;
         }
-        public Product UpdateProduct(Product product)
+        public Product UpdateProduct(Product product, IFormFile newImageFile)
         {
+            if (newImageFile != null && product.ImageUrl != null)
+            {
+                var existingImagePath = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", Path.GetFileName(product.ImageUrl));
+                if (System.IO.File.Exists(existingImagePath))
+                {
+                    System.IO.File.Delete(existingImagePath);
+                }
+            }
+
+            if (newImageFile != null && newImageFile.Length > 0)
+            {
+                var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
+                var uniqueFileName = Guid.NewGuid().ToString() + "_" + newImageFile.FileName;
+                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    newImageFile.CopyTo(stream);
+                }
+
+                product.ImageUrl = "https://localhost:7217/api/upload/" + uniqueFileName;
+            }
             _context.Entry(product).State = EntityState.Modified;
             _context.SaveChanges();
             return product;
@@ -55,6 +76,14 @@ namespace SavePalestineApi.Repositories
 
         public Product DeleteProduct(Product product)
         {
+            if (product.ImageUrl != null)
+            {
+                var imagePath = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", Path.GetFileName(product.ImageUrl));
+                if (System.IO.File.Exists(imagePath))
+                {
+                    System.IO.File.Delete(imagePath);
+                }
+            }
             _context.Remove(product);
             _context.SaveChanges();
             return product;

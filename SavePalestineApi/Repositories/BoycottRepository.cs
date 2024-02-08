@@ -3,27 +3,27 @@ using SavePalestineApi.Models;
 
 namespace SavePalestineApi.Repositories
 {
-    public class FundraisingRepository : IFundraisingRepository
+    public class BoycottRepository : IBoycottRepository
     {
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public FundraisingRepository(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
+        public BoycottRepository(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public ICollection<Fundraising> GetFundraisings()
+        public ICollection<Boycott> GetBoycotts()
         {
-            return _context.Fundraisings.OrderBy(f => f.Id).ToList();
+            return _context.Boycotts.OrderBy(f => f.Id).ToList();
         }
 
-        public Fundraising GetFundraising(int id)
+        public Boycott GetBoycott(int id)
         {
-            return _context.Fundraisings.Where(f => f.Id == id).FirstOrDefault();
+            return _context.Boycotts.Where(f => f.Id == id).FirstOrDefault();
         }
 
-        public Fundraising AddFundraising(Fundraising fundraising, IFormFile imageFile)
+        public Boycott AddBoycott(Boycott boycott, IFormFile imageFile)
         {
             if (imageFile != null && imageFile.Length > 0)
             {
@@ -35,26 +35,17 @@ namespace SavePalestineApi.Repositories
                     imageFile.CopyTo(stream);
                 }
 
-                fundraising.ImageUrl = "https://localhost:7217/api/upload/" + uniqueFileName;
+                boycott.ImageUrl = "https://localhost:7217/api/upload/" + uniqueFileName;
 
             }
 
-            _context.Fundraisings.Add(fundraising);
+            _context.Boycotts.Add(boycott);
             _context.SaveChanges();
-            return fundraising;
+            return boycott;
         }
 
-        public Fundraising UpdateFundraising(Fundraising fundraising, IFormFile newImageFile = null)
+        public Boycott UpdateBoycott(Boycott boycott, IFormFile newImageFile)
         {
-            if (newImageFile != null && fundraising.ImageUrl != null)
-            {
-                var existingImagePath = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", Path.GetFileName(fundraising.ImageUrl));
-                if (System.IO.File.Exists(existingImagePath))
-                {
-                    System.IO.File.Delete(existingImagePath);
-                }
-            }
-
             if (newImageFile != null && newImageFile.Length > 0)
             {
                 var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
@@ -65,29 +56,26 @@ namespace SavePalestineApi.Repositories
                     newImageFile.CopyTo(stream);
                 }
 
-   
-                fundraising.ImageUrl = "https://localhost:7217/api/upload/" + uniqueFileName;
+                boycott.ImageUrl = "https://localhost:7217/api/upload/" + uniqueFileName;
             }
-
-            _context.Entry(fundraising).State = EntityState.Modified;
+            _context.Entry(boycott).State = EntityState.Modified;
             _context.SaveChanges();
-            return fundraising;
+            return boycott;
         }
-
-        public Fundraising DeleteFundraising(Fundraising fundraising)
+        public Boycott DeleteBoycott(Boycott boycott)
         {
-            if (fundraising.ImageUrl != null)
+            if (!string.IsNullOrEmpty(boycott.ImageUrl))
             {
-                var imagePath = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", Path.GetFileName(fundraising.ImageUrl));
+                var imagePath = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", Path.GetFileName(boycott.ImageUrl));
                 if (System.IO.File.Exists(imagePath))
                 {
                     System.IO.File.Delete(imagePath);
                 }
             }
 
-            _context.Remove(fundraising);
+            _context.Remove(boycott);
             _context.SaveChanges();
-            return fundraising;
+            return boycott;
         }
     }
 }

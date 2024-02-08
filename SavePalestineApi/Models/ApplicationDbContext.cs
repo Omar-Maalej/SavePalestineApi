@@ -10,5 +10,6 @@ namespace SavePalestineApi.Models
 
         public DbSet<Product> Products { get; set; } 
         public DbSet<Fundraising> Fundraisings { get; set; }
+        public DbSet<Boycott> Boycotts { get; set; }
     }
 }
