@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SavePalestineApi.Models;
 using SavePalestineApi.Repositories;
 
@@ -20,6 +19,7 @@ namespace SavePalestineApi.Controllers
         public ActionResult<IEnumerable<Product>> GetProducts()
         {
             var products = _productRepository.GetProducts();
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -29,9 +29,9 @@ namespace SavePalestineApi.Controllers
 
 
         [HttpPost]
-        public ActionResult AddProduct(Product product)
+        public ActionResult AddProduct([FromForm] Product product, IFormFile formFile)
         {
-            _productRepository.AddProduct(product);
+            _productRepository.AddProduct(product, formFile);
             return Ok(product);
         }
 
@@ -72,5 +72,8 @@ namespace SavePalestineApi.Controllers
             _productRepository.DeleteProduct(product);
             return Ok(product);
         }
-    }
+   
+}
+
+
 }
