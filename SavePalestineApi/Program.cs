@@ -4,6 +4,7 @@ using SavePalestineApi.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddScoped<IFundraisingRepository, FundraisingRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddDbContext<SavePalestineApi.Models.ApplicationDbContext>(option => option.UseSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"]));
 builder.Services.AddControllers();
