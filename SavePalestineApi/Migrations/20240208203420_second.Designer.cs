@@ -12,8 +12,8 @@ using SavePalestineApi.Models;
 namespace SavePalestineApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240208162455_sixth migration")]
-    partial class sixthmigration
+    [Migration("20240208203420_second")]
+    partial class second
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -284,6 +284,9 @@ namespace SavePalestineApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MeasureUnit")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")

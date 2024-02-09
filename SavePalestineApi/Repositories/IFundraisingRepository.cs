@@ -7,7 +7,7 @@ namespace SavePalestineApi.Repositories
         ICollection<Fundraising> GetFundraisings();
         Fundraising GetFundraising(int id);
         Fundraising AddFundraising(Fundraising fundraising, IFormFile formFile);
-        Fundraising UpdateFundraising(Fundraising fundraising, IFormFile formFile);
+        Fundraising UpdateFundraising(Fundraising fundraising, IFormFile formFile=null);
         Fundraising DeleteFundraising(Fundraising fundraising);
 
     }

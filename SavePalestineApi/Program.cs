@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using SavePalestineApi.Models;
 using SavePalestineApi.Repositories;
 using SavePalestineApi.Services;
+using Stripe;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -40,10 +41,24 @@ builder.Services.AddAuthentication(options =>
     };
 }
          );
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MyAllowSpecificOrigins",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:3000") // Replace with your React app's origin
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+StripeConfiguration.ApiKey = "sk_test_51OhZ7cEVcBX5MPs0GprMjcjLRb9mcuFgBQ4UIHLxtYc3EbmSbT9XqcS1vXDCqi8HNf12OYsQsahHfEIGku1QK2Mn00kKrCh1HQ";
 
 var app = builder.Build();
 
@@ -53,6 +68,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("MyAllowSpecificOrigins");
 
 app.UseHttpsRedirection();
 

@@ -45,14 +45,14 @@ namespace SavePalestineApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult UpdateFundraising(int id, [FromForm] Fundraising fundraising, IFormFile formFile)
+        public ActionResult UpdateFundraising(int id, [FromForm] Fundraising fundraising)
         {
             if (id != fundraising.Id)
             {
                 return BadRequest();
             }
 
-            _fundraisingRepository.UpdateFundraising(fundraising, formFile);
+            _fundraisingRepository.UpdateFundraising(fundraising);
             return Ok(fundraising);
         }
 
